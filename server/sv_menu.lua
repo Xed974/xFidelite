@@ -19,8 +19,7 @@ AddEventHandler("xFidelite:buyItem", function(item, label, price, point)
     end
 end)
 
-RegisterNetEvent('xFidelite:buyCar')
-AddEventHandler('xFidelite:buyCar', function(vehicleProps, price, point)
+ESX.RegisterServerCallback("xFidelite:buyCar", function(source, cb, vehicleProps, price, point)
     local source = source
     local xPlayer = ESX.GetPlayerFromId(source)
 
@@ -31,17 +30,26 @@ AddEventHandler('xFidelite:buyCar', function(vehicleProps, price, point)
             ["@fidelite"] = point,
             ["@identifier"] = xPlayer.getIdentifier()
         }, function(result) if result ~= nil then TriggerClientEvent('esx:showNotification', source, ('(~g~Succès~s~)\nVous avez acheté une voiture pour ~r~%s points~s~.'):format(price)) end end)
-        Wait(1000)
-        MySQL.Async.execute('INSERT INTO owned_vehicles (owner, plate, vehicle) VALUES (@owner, @plate, @vehicle)', {
-            ['@owner']   = xPlayer.getIdentifier(),
-            ['@plate']   = vehicleProps.plate,
-            ['@vehicle'] = json.encode(vehicleProps)
-        }, function(rowsChange)
-            if rowsChange ~= nil then TriggerClientEvent('esx:showNotification', source, "(~g~Succès~s~)\nTu as reçu ton nouveau véhicule.") end
-        end)
+        cb(true)
     else
+        cb(false)
         TriggerClientEvent('esx:showNotification', source, ('(~r~Erreur~s~)\nIl vous manque ~r~%s points~s~.'):format(price - point))
     end
+end)
+
+RegisterNetEvent("xFidelite:addCar")
+AddEventHandler("xFidelite:addCar", function(vehicleProps)
+    local source = source
+    local xPlayer = ESX.GetPlayerFromId(source)
+
+    if (not xPlayer) then return end
+    MySQL.Async.execute('INSERT INTO owned_vehicles (owner, plate, vehicle) VALUES (@owner, @plate, @vehicle)', {
+        ['@owner']   = xPlayer.getIdentifier(),
+        ['@plate']   = vehicleProps.plate,
+        ['@vehicle'] = json.encode(vehicleProps)
+    }, function(rowsChange)
+        if rowsChange ~= nil then TriggerClientEvent('esx:showNotification', source, "(~g~Succès~s~)\nTu as reçu ton nouveau véhicule.") end
+    end)
 end)
 
 --- Xed#1188 | https://discord.gg/HvfAsbgVpM
