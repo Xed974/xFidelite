@@ -19,7 +19,7 @@ AddEventHandler("xFidelite:buyItem", function(item, label, price, point)
     end
 end)
 
-ESX.RegisterServerCallback("xFidelite:buyCar", function(source, cb, vehicleProps, price, point)
+ESX.RegisterServerCallback("xFidelite:buyCar", function(source, cb, price, point)
     local source = source
     local xPlayer = ESX.GetPlayerFromId(source)
 
