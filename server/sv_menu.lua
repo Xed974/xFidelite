@@ -32,8 +32,8 @@ ESX.RegisterServerCallback("xFidelite:buyCar", function(source, cb, vehicleProps
         }, function(result) if result ~= nil then TriggerClientEvent('esx:showNotification', source, ('(~g~Succès~s~)\nVous avez acheté une voiture pour ~r~%s points~s~.'):format(price)) end end)
         cb(true)
     else
-        cb(false)
         TriggerClientEvent('esx:showNotification', source, ('(~r~Erreur~s~)\nIl vous manque ~r~%s points~s~.'):format(price - point))
+        cb(false)
     end
 end)
 
