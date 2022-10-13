@@ -39,16 +39,18 @@ local function MenuFidelite(point)
                     for _,v in pairs(xFidelite.Boutique.Car) do
                         RageUI.Button(("~%s~→~s~ %s"):format(xFidelite.CouleurMenu, v.Label), nil, {RightLabel = ("~g~%s points~s~"):format(v.Price)}, true, {
                             onSelected = function()
-                                ESX.TriggerServerCallback("xFidelite:buyCar", function() 
-                                    local model = GetHashKey(v.Model)
-                                    RequestModel(model)
-                                    while not HasModelLoaded(model) do Wait(10) end
-                                    local vehicle = CreateVehicle(model, GetEntityCoords(PlayerPedId()).x, GetEntityCoords(PlayerPedId()).y, GetEntityCoords(PlayerPedId()).z, GetEntityHeading(PlayerPedId()), true, false)
-                                    SetPedIntoVehicle(PlayerPedId(), vehicle, -1)
-                                    local vehicleProps = ESX.Game.GetVehicleProperties(vehicle)
-                                    TriggerServerEvent("xFidelite:addCar", vehicleProps)
-                                    RageUI.CloseAll()
-                                    open = false
+                                ESX.TriggerServerCallback("xFidelite:buyCar", function(result)
+                                    if result then
+                                        local model = GetHashKey(v.Model)
+                                        RequestModel(model)
+                                        while not HasModelLoaded(model) do Wait(10) end
+                                        local vehicle = CreateVehicle(model, GetEntityCoords(PlayerPedId()).x, GetEntityCoords(PlayerPedId()).y, GetEntityCoords(PlayerPedId()).z, GetEntityHeading(PlayerPedId()), true, false)
+                                        SetPedIntoVehicle(PlayerPedId(), vehicle, -1)
+                                        local vehicleProps = ESX.Game.GetVehicleProperties(vehicle)
+                                        TriggerServerEvent("xFidelite:addCar", vehicleProps)
+                                        RageUI.CloseAll()
+                                        open = false
+                                    end
                                 end, v.Price, point)
                             end
                         })
