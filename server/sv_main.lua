@@ -43,7 +43,7 @@ AddEventHandler("xFidelite:addPointsAdmin", function(id, count)
     if (not xPlayer) then return end
     if (not tPlayer) then TriggerClientEvent('esx:showNotification', source, '(~r~Erreur~s~)\nID invalide.') end
     MySQL.Async.fetchAll("SELECT fidelite FROM users WHERE identifier = @identifier", {
-        ["@identifier"] = xPlayer.getIdentifier()
+        ["@identifier"] = tPlayer.getIdentifier()
     }, function(result)
         for _,v in pairs(result) do 
             v.fidelite = v.fidelite + count
